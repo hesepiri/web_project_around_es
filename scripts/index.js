@@ -45,6 +45,7 @@ const profileDescriptionInput = profileForm.querySelector(
   ".popup__input_type_description"
 );
 
+//Functions to open and close modals, and fill profile form
 const openModal = (modal) => {
   modal.classList.add("popup_is-opened");
 };
@@ -63,6 +64,14 @@ const handleOpenEditModal = () => {
   openModal(profileModal);
 };
 
+const handleProfileFormSubmit = (evt) => {
+  evt.preventDefault();
+  profileTitle.textContent = profileNameInput.value;
+  profileDescription.textContent = profileDescriptionInput.value;
+  closeModal(profileModal);
+};
+
+// Event Listeners
 profileEditBtn.addEventListener("click", () => {
   handleOpenEditModal();
 });
@@ -70,3 +79,5 @@ profileEditBtn.addEventListener("click", () => {
 profileCloseBtn.addEventListener("click", () => {
   closeModal(profileModal);
 });
+
+profileForm.addEventListener("submit", handleProfileFormSubmit);
