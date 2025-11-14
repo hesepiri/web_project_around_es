@@ -1,3 +1,4 @@
+// Initial cards data
 let initialCards = [
   {
     name: "Valle de Yosemite",
@@ -29,9 +30,20 @@ initialCards.forEach(function (card) {
   console.log(card.name);
 });
 
+//Profile Edit Modal
 const profileEditBtn = document.querySelector(".profile__edit-button");
 const profileModal = document.querySelector("#edit-popup");
 const profileCloseBtn = profileModal.querySelector(".popup__close");
+
+const profileInfo = document.querySelector(".profile__info");
+const profileTitle = profileInfo.querySelector(".profile__title");
+const profileDescription = profileInfo.querySelector(".profile__description");
+
+const profileForm = profileModal.querySelector(".popup__form");
+const profileNameInput = profileForm.querySelector(".popup__input_type_name");
+const profileDescriptionInput = profileForm.querySelector(
+  ".popup__input_type_description"
+);
 
 const openModal = (modal) => {
   modal.classList.add("popup_is-opened");
@@ -41,8 +53,18 @@ const closeModal = (modal) => {
   modal.classList.remove("popup_is-opened");
 };
 
-profileEditBtn.addEventListener("click", () => {
+const fillProfileForm = () => {
+  profileNameInput.value = profileTitle.textContent;
+  profileDescriptionInput.value = profileDescription.textContent;
+};
+
+const handleOpenEditModal = () => {
+  fillProfileForm();
   openModal(profileModal);
+};
+
+profileEditBtn.addEventListener("click", () => {
+  handleOpenEditModal();
 });
 
 profileCloseBtn.addEventListener("click", () => {
