@@ -27,7 +27,7 @@ let initialCards = [
 ];
 
 initialCards.forEach(function (card) {
-  console.log(card.name);
+  renderCard(card.name, card.link, document.querySelector(".cards__list"));
 });
 
 //Profile Edit Modal
@@ -45,7 +45,7 @@ const profileDescriptionInput = profileForm.querySelector(
   ".popup__input_type_description"
 );
 
-//Functions to open and close modals, and fill profile form
+//Functions for modals
 const openModal = (modal) => {
   modal.classList.add("popup_is-opened");
 };
@@ -54,6 +54,7 @@ const closeModal = (modal) => {
   modal.classList.remove("popup_is-opened");
 };
 
+//Functions for Profile
 const fillProfileForm = () => {
   profileNameInput.value = profileTitle.textContent;
   profileDescriptionInput.value = profileDescription.textContent;
@@ -69,6 +70,26 @@ const handleProfileFormSubmit = (evt) => {
   profileTitle.textContent = profileNameInput.value;
   profileDescription.textContent = profileDescriptionInput.value;
   closeModal(profileModal);
+};
+
+//Functions for Cards
+const cardTemplate = document.querySelector("#card-template").content;
+
+const getCardElement = (
+  name = "Sin título",
+  link = "./images/placeholder.jpg"
+) => {
+  const cardElement = cardTemplate.querySelector(".card").cloneNode(true);
+  const cardImage = cardElement.querySelector(".card__image");
+  const cardTitle = cardElement.querySelector(".card__title");
+  cardImage.src = link;
+  cardImage.alt = name;
+  cardTitle.textContent = name;
+  return cardElement;
+};
+
+const renderCard = (name, link, container) => {
+  container.prepend(getCardElement(name, link));
 };
 
 // Event Listeners
