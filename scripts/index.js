@@ -71,8 +71,6 @@ const cardModal = document.querySelector("#new-card-popup");
 const cardCloseBtn = cardModal.querySelector(".popup__close");
 
 const cardForm = cardModal.querySelector(".popup__form");
-const cardNameInput = cardForm.querySelector(".popup__input_type_card-name");
-const cardLinkInput = cardForm.querySelector(".popup__input_type_card-link");
 
 //Functions for modals
 const openModal = (modal) => {
