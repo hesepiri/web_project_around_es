@@ -26,8 +26,36 @@ let initialCards = [
   },
 ];
 
-//Functions for Card
-const cardTemplate = document.querySelector("#card-template").content;
+//Handlers
+const handleOpenEditModal = () => {
+  fillProfileForm();
+  openModal(profileModal);
+};
+
+const handleProfileFormSubmit = (evt) => {
+  evt.preventDefault();
+  profileTitle.textContent = profileNameInput.value;
+  profileDescription.textContent = profileDescriptionInput.value;
+  closeModal(profileModal);
+};
+
+const handleOpenCardModal = () => {
+  openModal(cardModal);
+};
+
+const handleCardFormSubmit = (evt) => {
+  evt.preventDefault();
+  const cardNameInput = cardModal.querySelector(".popup__input_type_card-name");
+  const cardLinkInput = cardModal.querySelector(".popup__input_type_card-url");
+
+  renderCard(
+    cardNameInput.value,
+    cardLinkInput.value,
+    document.querySelector(".cards__list")
+  );
+  closeModal(cardModal);
+  evt.target.reset();
+};
 
 const handlerCardLikeBtn = (btn) => {
   btn.addEventListener("click", () => {
@@ -40,6 +68,9 @@ const handlerDeleteCardBtn = (btn, card) => {
     card.remove();
   });
 };
+
+//Functions for Card
+const cardTemplate = document.querySelector("#card-template").content;
 
 const getCardElement = (
   name = "Sin título",
@@ -104,37 +135,6 @@ const closeModal = (modal) => {
 const fillProfileForm = () => {
   profileNameInput.value = profileTitle.textContent;
   profileDescriptionInput.value = profileDescription.textContent;
-};
-
-//Handlers
-const handleOpenEditModal = () => {
-  fillProfileForm();
-  openModal(profileModal);
-};
-
-const handleProfileFormSubmit = (evt) => {
-  evt.preventDefault();
-  profileTitle.textContent = profileNameInput.value;
-  profileDescription.textContent = profileDescriptionInput.value;
-  closeModal(profileModal);
-};
-
-const handleOpenCardModal = () => {
-  openModal(cardModal);
-};
-
-const handleCardFormSubmit = (evt) => {
-  evt.preventDefault();
-  const cardNameInput = cardModal.querySelector(".popup__input_type_card-name");
-  const cardLinkInput = cardModal.querySelector(".popup__input_type_card-url");
-
-  renderCard(
-    cardNameInput.value,
-    cardLinkInput.value,
-    document.querySelector(".cards__list")
-  );
-  closeModal(cardModal);
-  evt.target.reset();
 };
 
 // Event Listeners
