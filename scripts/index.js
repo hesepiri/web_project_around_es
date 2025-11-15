@@ -35,6 +35,12 @@ const handlerCardLikeBtn = (btn) => {
   });
 };
 
+const handlerDeleteCardBtn = (btn, card) => {
+  btn.addEventListener("click", () => {
+    card.remove();
+  });
+};
+
 const getCardElement = (
   name = "Sin título",
   link = "./images/placeholder.jpg"
@@ -49,6 +55,7 @@ const getCardElement = (
   cardTitle.textContent = name;
 
   handlerCardLikeBtn(cardLikeButton);
+  handlerDeleteCardBtn(cardDeleteButton, cardElement);
 
   return cardElement;
 };
