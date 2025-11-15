@@ -58,7 +58,8 @@ const renderCard = (name, link, container) => {
 };
 
 initialCards.forEach(function (card) {
-  renderCard(card.name, card.link, document.querySelector(".cards__list"));
+  const cardsList = document.querySelector(".cards__list");
+  renderCard(card.name, card.link, cardsList);
 });
 
 //Profile Edit Modal
