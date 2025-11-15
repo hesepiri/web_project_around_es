@@ -29,6 +29,12 @@ let initialCards = [
 //Functions for Card
 const cardTemplate = document.querySelector("#card-template").content;
 
+const handlerCardLikeBtn = (btn) => {
+  btn.addEventListener("click", () => {
+    btn.classList.toggle("card__like-button_is-active");
+  });
+};
+
 const getCardElement = (
   name = "Sin título",
   link = "./images/placeholder.jpg"
@@ -36,9 +42,14 @@ const getCardElement = (
   const cardElement = cardTemplate.querySelector(".card").cloneNode(true);
   const cardImage = cardElement.querySelector(".card__image");
   const cardTitle = cardElement.querySelector(".card__title");
+  const cardLikeButton = cardElement.querySelector(".card__like-button");
+  const cardDeleteButton = cardElement.querySelector(".card__delete-button");
   cardImage.src = link;
   cardImage.alt = name;
   cardTitle.textContent = name;
+
+  handlerCardLikeBtn(cardLikeButton);
+
   return cardElement;
 };
 
@@ -87,7 +98,7 @@ const fillProfileForm = () => {
   profileDescriptionInput.value = profileDescription.textContent;
 };
 
-//Handlers`
+//Handlers
 const handleOpenEditModal = () => {
   fillProfileForm();
   openModal(profileModal);
@@ -108,8 +119,7 @@ const handleCardFormSubmit = (evt) => {
   evt.preventDefault();
   const cardNameInput = cardModal.querySelector(".popup__input_type_card-name");
   const cardLinkInput = cardModal.querySelector(".popup__input_type_card-url");
-  console.log(cardNameInput.value);
-  console.log(cardLinkInput.value);
+
   renderCard(
     cardNameInput.value,
     cardLinkInput.value,
