@@ -47,7 +47,6 @@ const handleCardFormSubmit = (evt) => {
   evt.preventDefault();
   const cardNameInput = cardModal.querySelector(".popup__input_type_card-name");
   const cardLinkInput = cardModal.querySelector(".popup__input_type_card-url");
-
   renderCard(
     cardNameInput.value,
     cardLinkInput.value,
@@ -69,9 +68,25 @@ const handlerDeleteCardBtn = (btn, card) => {
   });
 };
 
-//Functions for Card
+const handlerImageClick = (image) => {
+  image.addEventListener("click", () => {
+    imagePicture.src = image.src;
+    imagePicture.alt = image.alt;
+    imageCaption.textContent = image.alt;
+    openModal(imageModal);
+  });
+};
+
+//Card Template
 const cardTemplate = document.querySelector("#card-template").content;
 
+//Image Modal
+const imageModal = document.querySelector("#image-popup");
+const imagePicture = imageModal.querySelector(".popup__image");
+const imageCaption = imageModal.querySelector(".popup__caption");
+const imageCloseBtn = imageModal.querySelector(".popup__close");
+
+//Card - Functions
 const getCardElement = (
   name = "Sin título",
   link = "./images/placeholder.jpg"
@@ -84,10 +99,9 @@ const getCardElement = (
   cardImage.src = link;
   cardImage.alt = name;
   cardTitle.textContent = name;
-
   handlerCardLikeBtn(cardLikeButton);
   handlerDeleteCardBtn(cardDeleteButton, cardElement);
-
+  handlerImageClick(cardImage);
   return cardElement;
 };
 
@@ -95,6 +109,7 @@ const renderCard = (name, link, container) => {
   container.prepend(getCardElement(name, link));
 };
 
+//Render Initial Cards
 initialCards.forEach(function (card) {
   const cardsList = document.querySelector(".cards__list");
   renderCard(card.name, card.link, cardsList);
@@ -122,7 +137,7 @@ const cardCloseBtn = cardModal.querySelector(".popup__close");
 
 const cardForm = cardModal.querySelector(".popup__form");
 
-//Functions for modals
+//Modals - Functions
 const openModal = (modal) => {
   modal.classList.add("popup_is-opened");
 };
@@ -131,7 +146,7 @@ const closeModal = (modal) => {
   modal.classList.remove("popup_is-opened");
 };
 
-//Functions for Profile
+//Profile - Functions
 const fillProfileForm = () => {
   profileNameInput.value = profileTitle.textContent;
   profileDescriptionInput.value = profileDescription.textContent;
@@ -157,3 +172,7 @@ cardCloseBtn.addEventListener("click", () => {
 });
 
 cardForm.addEventListener("submit", handleCardFormSubmit);
+
+imageCloseBtn.addEventListener("click", () => {
+  closeModal(imageModal);
+});
