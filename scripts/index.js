@@ -191,7 +191,7 @@ imageCloseBtn.addEventListener("click", () => {
 
 // Sprint9 - Form Validation
 
-/* Genericos funcs add*/
+/* Funciones mostrar/ocultar mensajes de error */
 const showPopupInputError = (form, inputElement, errorMessage) => {
   const errorElement = form.querySelector(`.${inputElement.name}-input-error`);
   inputElement.classList.add("popup__input_type_error");
@@ -276,5 +276,24 @@ cardForm.addEventListener("submit", (evt) => {
   });
   if (!formValid) {
     evt.preventDefault();
+  }
+});
+
+/* Cerrar modales al hacer click fuera del modal */
+profileModal.addEventListener("click", (event) => {
+  if (event.target === profileModal) {
+    closeModal(profileModal);
+  }
+});
+
+imageModal.addEventListener("click", (event) => {
+  if (event.target === imageModal) {
+    closeModal(imageModal);
+  }
+});
+
+cardModal.addEventListener("click", (event) => {
+  if (event.target === cardModal) {
+    closeModal(cardModal);
   }
 });
