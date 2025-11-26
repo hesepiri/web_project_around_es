@@ -48,7 +48,6 @@
             class="popup__close"
             type="button"
           ></button>
-          <!-- START - Edit Profile Pop-up FORM -->
           <h3 class="popup__title">Editar perfil</h3>
           <form class="popup__form" id="edit-profile-form">
             <input
@@ -79,7 +78,6 @@
           </form>
         </div>
       </div>
-      <!-- END - Edit Profile Pop-up FORM -->
       <div class="popup" id="new-card-popup">
         <div class="popup__content">
           <button
@@ -88,23 +86,35 @@
             type="button"
           ></button>
           <h3 class="popup__title">Nuevo lugar</h3>
+          <!---->
           <form class="popup__form" id="new-card-form">
             <input
               class="popup__input popup__input_type_card-name"
-              name="place-name"
+              name="titulo"
               placeholder="Título"
-              required
               type="text"
+              minlength="2"
+              maxlength="30"
+              required
             />
+            <span class="titulo-input-error popup__input-error"
+              >Este campo es obligatorio.</span
+            >
             <input
               class="popup__input popup__input_type_card-url"
               name="link"
               placeholder="Enlace a la imagen"
-              required
               type="url"
+              required
             />
-            <button class="button popup__button" type="submit">Crear</button>
+            <span class="link-input-error popup__input-error"
+              >Este campo es obligatorio.</span
+            >
+            <button class="button popup__button" type="submit" disabled>
+              Crear
+            </button>
           </form>
+          <!---->
         </div>
       </div>
       <div class="popup" id="image-popup">

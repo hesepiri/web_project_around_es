@@ -87,10 +87,7 @@ const imageCaption = imageModal.querySelector(".popup__caption");
 const imageCloseBtn = imageModal.querySelector(".popup__close");
 
 //Card - Functions
-const getCardElement = (
-  name = "Sin título",
-  link = "./images/placeholder.jpg"
-) => {
+const getCardElement = (name, link) => {
   const cardElement = cardTemplate.querySelector(".card").cloneNode(true);
   const cardImage = cardElement.querySelector(".card__image");
   const cardTitle = cardElement.querySelector(".card__title");
@@ -178,51 +175,97 @@ imageCloseBtn.addEventListener("click", () => {
 });
 
 // Sprint9 - Form Validation
-//const profileForm = profileModal.querySelector(".popup__form");
-const inputsPopup = profileForm.querySelectorAll(".popup__input");
-const submitButtonProfile = profileForm.querySelector(".popup__button");
 
-const showPopupInputError = (inputElement, errorMessage) => {
-  const errorElement = profileForm.querySelector(
-    `.${inputElement.name}-input-error`
-  );
+/* Edit Profile Form */
+//const editProfileForm = profileModal.querySelector(".popup__form");
+const profileInputs = profileForm.querySelectorAll(".popup__input");
+const profileSubmitButton = profileForm.querySelector(".popup__button");
+
+/* New Card Form */
+//const cardForm = cardModal.querySelector(".popup__form");
+const newCardInputs = cardForm.querySelectorAll(".popup__input");
+const newCardSubmitButton = cardForm.querySelector(".popup__button");
+
+/* Genericos funcs add*/
+const showPopupInputError = (form, inputElement, errorMessage) => {
+  const errorElement = form.querySelector(`.${inputElement.name}-input-error`);
   inputElement.classList.add("popup__input_type_error");
   errorElement.textContent = errorMessage;
   errorElement.classList.add("popup__input-error_active");
 };
 
-const hidePopupInputError = (inputElement) => {
-  const errorElement = profileForm.querySelector(
-    `.${inputElement.name}-input-error`
-  );
+const hidePopupInputError = (form, inputElement) => {
+  const errorElement = form.querySelector(`.${inputElement.name}-input-error`);
   inputElement.classList.remove("popup__input_type_error");
   errorElement.textContent = "";
   errorElement.classList.remove("popup__input-error_active");
 };
 
-const toggleButtonState = () => {
-  const allValid = Array.from(inputsPopup).every(
+const toggleButtonState = (btn, inputs) => {
+  const allValid = Array.from(inputs).every(
     (inputElement) => inputElement.validity.valid
   );
-  submitButtonProfile.disabled = !allValid;
+  btn.disabled = !allValid;
 };
 
-inputsPopup.forEach((inputElement) => {
+/* Profile */
+profileInputs.forEach((inputElement) => {
   inputElement.addEventListener("input", () => {
     if (!inputElement.validity.valid) {
-      showPopupInputError(inputElement, inputElement.validationMessage);
+      showPopupInputError(
+        profileForm,
+        inputElement,
+        inputElement.validationMessage
+      );
     } else {
-      hidePopupInputError(inputElement);
+      hidePopupInputError(profileForm, inputElement);
     }
-    toggleButtonState();
+    toggleButtonState(profileSubmitButton, profileInputs);
   });
 });
 
 profileForm.addEventListener("submit", (evt) => {
   let formValid = true;
-  inputsPopup.forEach((inputElement) => {
+  profileInputs.forEach((inputElement) => {
     if (!inputElement.validity.valid) {
-      showPopupInputError(inputElement, inputElement.validationMessage);
+      showPopupInputError(
+        profileForm,
+        inputElement,
+        inputElement.validationMessage
+      );
+      formValid = false;
+    }
+  });
+  if (!formValid) {
+    evt.preventDefault();
+  }
+});
+
+/* New Card */
+newCardInputs.forEach((inputElement) => {
+  inputElement.addEventListener("input", () => {
+    if (!inputElement.validity.valid) {
+      showPopupInputError(
+        cardForm,
+        inputElement,
+        inputElement.validationMessage
+      );
+    } else {
+      hidePopupInputError(cardForm, inputElement);
+    }
+    toggleButtonState(newCardSubmitButton, newCardInputs);
+  });
+});
+
+cardForm.addEventListener("submit", (evt) => {
+  let formValid = true;
+  newCardInputs.forEach((inputElement) => {
+    if (!inputElement.validity.valid) {
+      showPopupInputError(
+        cardForm,
+        inputElement,
+        inputElement.validationMessage
+      );
       formValid = false;
     }
   });
