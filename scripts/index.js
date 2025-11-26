@@ -176,3 +176,57 @@ cardForm.addEventListener("submit", handleCardFormSubmit);
 imageCloseBtn.addEventListener("click", () => {
   closeModal(imageModal);
 });
+
+// Sprint9 - Form Validation
+//const profileForm = profileModal.querySelector(".popup__form");
+const inputsPopup = profileForm.querySelectorAll(".popup__input");
+const submitButtonProfile = profileForm.querySelector(".popup__button");
+
+const showPopupInputError = (inputElement, errorMessage) => {
+  const errorElement = profileForm.querySelector(
+    `.${inputElement.name}-input-error`
+  );
+  inputElement.classList.add("popup__input_type_error");
+  errorElement.textContent = errorMessage;
+  errorElement.classList.add("popup__input-error_active");
+};
+
+const hidePopupInputError = (inputElement) => {
+  const errorElement = profileForm.querySelector(
+    `.${inputElement.name}-input-error`
+  );
+  inputElement.classList.remove("popup__input_type_error");
+  errorElement.textContent = "";
+  errorElement.classList.remove("popup__input-error_active");
+};
+
+const toggleButtonState = () => {
+  const allValid = Array.from(inputsPopup).every(
+    (inputElement) => inputElement.validity.valid
+  );
+  submitButtonProfile.disabled = !allValid;
+};
+
+inputsPopup.forEach((inputElement) => {
+  inputElement.addEventListener("input", () => {
+    if (!inputElement.validity.valid) {
+      showPopupInputError(inputElement, inputElement.validationMessage);
+    } else {
+      hidePopupInputError(inputElement);
+    }
+    toggleButtonState();
+  });
+});
+
+profileForm.addEventListener("submit", (evt) => {
+  let formValid = true;
+  inputsPopup.forEach((inputElement) => {
+    if (!inputElement.validity.valid) {
+      showPopupInputError(inputElement, inputElement.validationMessage);
+      formValid = false;
+    }
+  });
+  if (!formValid) {
+    evt.preventDefault();
+  }
+});

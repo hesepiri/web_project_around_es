@@ -48,6 +48,7 @@
             class="popup__close"
             type="button"
           ></button>
+          <!-- START - Edit Profile Pop-up FORM -->
           <h3 class="popup__title">Editar perfil</h3>
           <form class="popup__form" id="edit-profile-form">
             <input
@@ -55,17 +56,30 @@
               name="name"
               placeholder="Nombre"
               type="text"
+              minlength="2"
+              maxlength="40"
+              required
             />
+            <span class="name-input-error popup__input-error"
+              >Este campo es obligatorio.</span
+            >
             <input
               class="popup__input popup__input_type_description"
               name="description"
               placeholder="Acerca de mí"
               type="text"
+              minlength="2"
+              maxlength="200"
+              required
             />
+            <span class="description-input-error popup__input-error"
+              >Este campo es obligatorio.</span
+            >
             <button class="button popup__button" type="submit">Guardar</button>
           </form>
         </div>
       </div>
+      <!-- END - Edit Profile Pop-up FORM -->
       <div class="popup" id="new-card-popup">
         <div class="popup__content">
           <button

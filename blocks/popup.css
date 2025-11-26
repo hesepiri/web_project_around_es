@@ -117,6 +117,34 @@
   margin: 0;
 }
 
+/* === ERRORES === */
+.popup__input-error {
+  display: none;
+  font-size: 12px;
+  color: red;
+}
+
+.popup__input_type_error {
+  border-bottom: 2px solid red;
+}
+
+.popup__input-error_active {
+  display: block;
+  color: red;
+  font-size: 12px;
+}
+
+/* === BOTON DISABLED === */
+.popup__button:disabled {
+  border-color: lightgray;
+  border-width: 2px;
+  border-style: solid;
+  background-color: white;
+  color: lightgray;
+  cursor: not-allowed;
+}
+
+/* === MEDIA QUERIES === */
 @media screen and (max-width: 544px) {
   .popup {
     bottom: 112px;
