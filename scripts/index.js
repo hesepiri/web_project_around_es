@@ -47,7 +47,7 @@ const handleOpenCardModal = () => {
   cardInputs.forEach((inputElement) => {
     inputElement.value = "";
     hidePopupInputError(cardForm, inputElement);
-    cardSubmitButton.disabled = true;
+    toggleButtonState(cardSubmitButton, cardInputs);
   });
   openModal(cardModal);
 };
