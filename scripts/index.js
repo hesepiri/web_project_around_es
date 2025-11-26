@@ -28,6 +28,10 @@ let initialCards = [
 
 //Handlers
 const handleOpenEditModal = () => {
+  profileInputs.forEach((inputElement) => {
+    hidePopupInputError(profileForm, inputElement);
+  });
+  profileSubmitButton.disabled = false;
   fillProfileForm();
   openModal(profileModal);
 };
@@ -40,6 +44,10 @@ const handleProfileFormSubmit = (evt) => {
 };
 
 const handleOpenCardModal = () => {
+  cardInputs.forEach((inputElement) => {
+    inputElement.value = "";
+    hidePopupInputError(cardForm, inputElement);
+  });
   openModal(cardModal);
 };
 
@@ -127,12 +135,18 @@ const profileDescriptionInput = profileForm.querySelector(
   ".popup__input_type_description"
 );
 
+const profileInputs = profileForm.querySelectorAll(".popup__input");
+const profileSubmitButton = profileForm.querySelector(".popup__button");
+
 //Card Modal
 const cardAddBtn = document.querySelector(".profile__add-button");
 const cardModal = document.querySelector("#new-card-popup");
 const cardCloseBtn = cardModal.querySelector(".popup__close");
 
 const cardForm = cardModal.querySelector(".popup__form");
+
+const cardInputs = cardForm.querySelectorAll(".popup__input");
+const cardSubmitButton = cardForm.querySelector(".popup__button");
 
 //Modals - Functions
 const openModal = (modal) => {
@@ -175,16 +189,6 @@ imageCloseBtn.addEventListener("click", () => {
 });
 
 // Sprint9 - Form Validation
-
-/* Edit Profile Form */
-//const editProfileForm = profileModal.querySelector(".popup__form");
-const profileInputs = profileForm.querySelectorAll(".popup__input");
-const profileSubmitButton = profileForm.querySelector(".popup__button");
-
-/* New Card Form */
-//const cardForm = cardModal.querySelector(".popup__form");
-const newCardInputs = cardForm.querySelectorAll(".popup__input");
-const newCardSubmitButton = cardForm.querySelector(".popup__button");
 
 /* Genericos funcs add*/
 const showPopupInputError = (form, inputElement, errorMessage) => {
@@ -242,7 +246,7 @@ profileForm.addEventListener("submit", (evt) => {
 });
 
 /* New Card */
-newCardInputs.forEach((inputElement) => {
+cardInputs.forEach((inputElement) => {
   inputElement.addEventListener("input", () => {
     if (!inputElement.validity.valid) {
       showPopupInputError(
@@ -253,13 +257,13 @@ newCardInputs.forEach((inputElement) => {
     } else {
       hidePopupInputError(cardForm, inputElement);
     }
-    toggleButtonState(newCardSubmitButton, newCardInputs);
+    toggleButtonState(cardSubmitButton, cardInputs);
   });
 });
 
 cardForm.addEventListener("submit", (evt) => {
   let formValid = true;
-  newCardInputs.forEach((inputElement) => {
+  cardInputs.forEach((inputElement) => {
     if (!inputElement.validity.valid) {
       showPopupInputError(
         cardForm,
