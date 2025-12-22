@@ -1,3 +1,9 @@
+/* Refactorized code*/
+import { Card } from "./Card.js";
+//import { FormValidator } from "./FormValidator.js";
+import * as utils from "./utils.js";
+/******/
+
 // Initial cards data
 let initialCards = [
   {
@@ -28,87 +34,15 @@ let initialCards = [
 
 // Selectores globales
 const cardsList = document.querySelector(".cards__list");
-const cardTemplate = document.querySelector("#card-template").content;
-
-// Image Modal Elements
-const imageModal = document.querySelector("#image-popup");
-const imagePicture = imageModal.querySelector(".popup__image");
-const imageCaption = imageModal.querySelector(".popup__caption");
-const imageCloseBtn = imageModal.querySelector(".popup__close");
-
-// Card - Functions
-const handlerCardLikeBtn = (btn) => {
-  btn.addEventListener("click", () =>
-    btn.classList.toggle("card__like-button_is-active")
-  );
-};
-
-const handlerDeleteCardBtn = (btn, card) => {
-  btn.addEventListener("click", () => card.remove());
-};
-
-const handlerImageClick = (image) => {
-  image.addEventListener("click", () => {
-    imagePicture.src = image.src;
-    imagePicture.alt = image.alt;
-    imageCaption.textContent = image.alt;
-    openModal(imageModal);
-  });
-};
-
-const getCardElement = (name, link) => {
-  const cardElement = cardTemplate.querySelector(".card").cloneNode(true);
-  const cardImage = cardElement.querySelector(".card__image");
-  const cardTitle = cardElement.querySelector(".card__title");
-  const cardLikeButton = cardElement.querySelector(".card__like-button");
-  const cardDeleteButton = cardElement.querySelector(".card__delete-button");
-
-  cardImage.src = link;
-  cardImage.alt = name;
-  cardTitle.textContent = name;
-
-  handlerCardLikeBtn(cardLikeButton);
-  handlerDeleteCardBtn(cardDeleteButton, cardElement);
-  handlerImageClick(cardImage);
-
-  return cardElement;
-};
-
-const renderCard = (name, link, container) => {
-  container.prepend(getCardElement(name, link));
-};
 
 // Render Initial Cards
-initialCards.forEach((card) => renderCard(card.name, card.link, cardsList));
+initialCards.forEach((card) => Card.renderCard(card, cardsList));
 
-// Modals - Functions
-const handleEscapeKey = (evt) => {
-  if (evt.key === "Escape") {
-    // Busca el modal abierto actualmente y lo cierra
-    const openedModal = document.querySelector(".popup_is-opened");
-    if (openedModal) {
-      closeModal(openedModal);
-    }
-  }
-};
-
-const closeModal = (modal) => {
-  modal.classList.remove("popup_is-opened");
-  // Eliminar listeners globales cuando se cierra el modal
-  document.removeEventListener("keydown", handleEscapeKey);
-};
-
-const openModal = (modal) => {
-  modal.classList.add("popup_is-opened");
-  // Añadir listeners globales cuando se abre el modal
-  document.addEventListener("keydown", handleEscapeKey);
-};
-
-// Event listener para cerrar dando click con el mouse afuera del modal [Overlay] - aplicado globalmente a todos los popups
+// Event listener para cerrar dando click con el mouse afuera del modal [Overlay] - aplicado globalmente a todos los popups (utils)
 document.querySelectorAll(".popup").forEach((popup) => {
   popup.addEventListener("click", (evt) => {
     if (evt.target === popup) {
-      closeModal(popup);
+      utils.closeModal(popup);
     }
   });
 });
@@ -132,19 +66,21 @@ const fillProfileForm = () => {
   profileDescriptionInput.value = profileDescription.textContent;
 };
 
+//FV
 const handleOpenEditModal = () => {
   // Simplificado: llamamos directamente a la función de validación para resetear errores/estado del botón
   fillProfileForm();
   toggleButtonState(profileSubmitButton, profileInputs); // Habilita el botón si los valores cargados son válidos
   profileInputs.forEach((input) => hidePopupInputError(profileForm, input));
-  openModal(profileModal);
+  utils.openModal(profileModal);
 };
 
+//utils
 const handleProfileFormSubmit = (evt) => {
   evt.preventDefault();
   profileTitle.textContent = profileNameInput.value;
   profileDescription.textContent = profileDescriptionInput.value;
-  closeModal(profileModal);
+  utils.closeModal(profileModal);
 };
 
 // Card Modal Elements & Handlers
@@ -159,20 +95,25 @@ const handleOpenCardModal = () => {
   cardForm.reset(); // Usa el método nativo reset()
   toggleButtonState(cardSubmitButton, cardInputs); // Deshabilita el botón porque el form está vacío
   cardInputs.forEach((input) => hidePopupInputError(cardForm, input));
-  openModal(cardModal);
+  utils.openModal(cardModal);
 };
 
+//utils
 const handleCardFormSubmit = (evt) => {
   evt.preventDefault();
   const cardNameInput = cardModal.querySelector(".popup__input_type_card-name");
   const cardLinkInput = cardModal.querySelector(".popup__input_type_card-url");
 
-  renderCard(cardNameInput.value, cardLinkInput.value, cardsList);
-  closeModal(cardModal);
+  const newCard = {
+    name: cardNameInput.value,
+    link: cardLinkInput.value,
+  };
+  Card.renderCard(newCard, cardsList);
+  utils.closeModal(cardModal);
   evt.target.reset();
 };
 
-// Form Validation Functions & Logic
+// Form Validation Functions & Logic (FV)
 const showPopupInputError = (form, inputElement, errorMessage) => {
   const errorElement = form.querySelector(`.${inputElement.name}-input-error`);
   inputElement.classList.add("popup__input_type_error");
@@ -191,6 +132,7 @@ const hidePopupInputError = (form, inputElement) => {
   }
 };
 
+//FV
 const toggleButtonState = (btn, inputsArray) => {
   const allValid = inputsArray.every(
     (inputElement) => inputElement.validity.valid
@@ -198,7 +140,7 @@ const toggleButtonState = (btn, inputsArray) => {
   btn.disabled = !allValid;
 };
 
-// Nueva función genérica para añadir validación a cualquier formulario
+// Nueva función genérica para añadir validación a cualquier formulario (FV)
 const enableValidation = (formElement, inputElements, submitButton) => {
   inputElements.forEach((inputElement) => {
     inputElement.addEventListener("input", () => {
@@ -215,7 +157,7 @@ const enableValidation = (formElement, inputElements, submitButton) => {
     });
   });
 
-  // Manejar el submit para prevenir envío si no es válido
+  // Manejar el submit para prevenir envío si no es válido (FV)
   formElement.addEventListener("submit", (evt) => {
     const formValid = inputElements.every((input) => input.validity.valid);
     if (!formValid) {
@@ -224,23 +166,19 @@ const enableValidation = (formElement, inputElements, submitButton) => {
   });
 };
 
-// Aplicar la validación a los formularios específicos
+// Aplicar la validación a los formularios específicos (FV)
 enableValidation(profileForm, profileInputs, profileSubmitButton);
 enableValidation(cardForm, cardInputs, cardSubmitButton);
 
-// Event Listeners
+// Event Listeners (utils)
 profileEditBtn.addEventListener("click", handleOpenEditModal);
 profileForm.addEventListener("submit", handleProfileFormSubmit);
 profileCloseBtn.addEventListener("click", () => {
-  closeModal(profileModal);
+  utils.closeModal(profileModal);
 });
 
 cardAddBtn.addEventListener("click", handleOpenCardModal);
 cardForm.addEventListener("submit", handleCardFormSubmit);
 cardCloseBtn.addEventListener("click", () => {
-  closeModal(cardModal);
-});
-
-imageCloseBtn.addEventListener("click", () => {
-  closeModal(imageModal);
+  utils.closeModal(cardModal);
 });
