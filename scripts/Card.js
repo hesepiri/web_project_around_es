@@ -1,8 +1,6 @@
-// scripts/Card.js
 export default class Card {
   constructor(data, cardSelector, handleCardClick) {
-    this._name = data.name;
-    this._link = data.link;
+    this._data = data;
     this._cardSelector = cardSelector;
     this._handleCardClick = handleCardClick; // Función para el zoom de imagen
   }
@@ -44,19 +42,19 @@ export default class Card {
     this._element
       .querySelector(".card__image")
       .addEventListener("click", () => {
-        this._handleCardClick(this._name, this._link);
+        this._handleCardClick(this._data);
       });
   }
 
-  // Método público: devuelve la tarjeta funcional
+  // Método público: devuelve la Card generada
   generateCard() {
     this._element = this._getTemplate();
     this._setEventListeners();
 
     const cardImage = this._element.querySelector(".card__image");
-    cardImage.src = this._link;
-    cardImage.alt = this._name;
-    this._element.querySelector(".card__title").textContent = this._name;
+    cardImage.src = this._data.link;
+    cardImage.alt = this._data.name;
+    this._element.querySelector(".card__title").textContent = this._data.name;
 
     return this._element;
   }

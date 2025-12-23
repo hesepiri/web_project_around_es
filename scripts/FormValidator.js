@@ -1,4 +1,3 @@
-// scripts/FormValidator.js
 export default class FormValidator {
   constructor(config, formElement) {
     if (!formElement) {
