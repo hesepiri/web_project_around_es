@@ -1,11 +1,10 @@
-/* Refactorized code*/
-import { Card } from "./Card.js";
-//import { FormValidator } from "./FormValidator.js";
-import * as utils from "./utils.js";
-/******/
+// scripts/index.js
+import Card from "./Card.js";
+import FormValidator from "./FormValidator.js";
+import { openModal, closeModal } from "./utils.js";
 
-// Initial cards data
-let initialCards = [
+// 1. DATOS INICIALES
+const initialCards = [
   {
     name: "Valle de Yosemite",
     link: "https://practicum-content.s3.us-west-1.amazonaws.com/web-code/moved_yosemite.jpg",
@@ -32,153 +31,96 @@ let initialCards = [
   },
 ];
 
-// Selectores globales
-const cardsList = document.querySelector(".cards__list");
+// 2. CONFIGURACIÓN DE VALIDACIÓN
+const validationConfig = {
+  inputSelector: ".popup__input",
+  submitButtonSelector: ".popup__button",
+  inputErrorClass: "popup__input_type_error",
+  errorClass: "popup__input-error_active",
+};
 
-// Render Initial Cards
-initialCards.forEach((card) => Card.renderCard(card, cardsList));
-
-// Event listener para cerrar dando click con el mouse afuera del modal [Overlay] - aplicado globalmente a todos los popups (utils)
-document.querySelectorAll(".popup").forEach((popup) => {
-  popup.addEventListener("click", (evt) => {
-    if (evt.target === popup) {
-      utils.closeModal(popup);
-    }
-  });
-});
-
-// Profile Edit Modal Elements & Handlers
-const profileEditBtn = document.querySelector(".profile__edit-button");
+// 3. SELECTORES (Rescatados de tu index.js original)
 const profileModal = document.querySelector("#edit-popup");
-const profileTitle = document.querySelector(".profile__title");
-const profileDescription = document.querySelector(".profile__description");
-const profileForm = profileModal.querySelector(".popup__form");
-const profileCloseBtn = profileModal.querySelector(".popup__close");
+const cardModal = document.querySelector("#new-card-popup");
+const imageModal = document.querySelector("#image-popup");
+
+const profileForm = document.querySelector("#edit-profile-form");
+const cardForm = document.querySelector("#new-card-form");
+
 const profileNameInput = profileForm.querySelector(".popup__input_type_name");
 const profileDescriptionInput = profileForm.querySelector(
   ".popup__input_type_description"
 );
-const profileInputs = Array.from(profileForm.querySelectorAll(".popup__input"));
-const profileSubmitButton = profileForm.querySelector(".popup__button");
+const profileTitle = document.querySelector(".profile__title");
+const profileDescription = document.querySelector(".profile__description");
 
-const fillProfileForm = () => {
-  profileNameInput.value = profileTitle.textContent;
-  profileDescriptionInput.value = profileDescription.textContent;
+const cardsList = document.querySelector(".cards__list");
+
+// Botones de apertura/cierre
+const profileEditBtn = document.querySelector(".profile__edit-button");
+const cardAddBtn = document.querySelector(".profile__add-button");
+const closeButtons = document.querySelectorAll(".popup__close");
+
+// 4. LÓGICA DE TARJETAS
+const handleCardClick = (name, link) => {
+  const imagePicture = imageModal.querySelector(".popup__image");
+  const imageCaption = imageModal.querySelector(".popup__caption");
+  imagePicture.src = link;
+  imagePicture.alt = name;
+  imageCaption.textContent = name;
+  openModal(imageModal);
 };
 
-//FV
-const handleOpenEditModal = () => {
-  // Simplificado: llamamos directamente a la función de validación para resetear errores/estado del botón
-  fillProfileForm();
-  toggleButtonState(profileSubmitButton, profileInputs); // Habilita el botón si los valores cargados son válidos
-  profileInputs.forEach((input) => hidePopupInputError(profileForm, input));
-  utils.openModal(profileModal);
-};
+// Renderizar tarjetas iniciales
+initialCards.forEach((data) => {
+  const card = new Card(data, "#card-template", handleCardClick);
+  const cardElement = card.generateCard();
+  cardsList.append(cardElement);
+});
 
-//utils
+// 5. LÓGICA DE FORMULARIOS (Manejadores de Submit)
 const handleProfileFormSubmit = (evt) => {
   evt.preventDefault();
   profileTitle.textContent = profileNameInput.value;
   profileDescription.textContent = profileDescriptionInput.value;
-  utils.closeModal(profileModal);
+  closeModal(profileModal);
 };
 
-// Card Modal Elements & Handlers
-const cardAddBtn = document.querySelector(".profile__add-button");
-const cardModal = document.querySelector("#new-card-popup");
-const cardForm = cardModal.querySelector(".popup__form");
-const cardCloseBtn = cardModal.querySelector(".popup__close");
-const cardInputs = Array.from(cardForm.querySelectorAll(".popup__input"));
-const cardSubmitButton = cardForm.querySelector(".popup__button");
-
-const handleOpenCardModal = () => {
-  cardForm.reset(); // Usa el método nativo reset()
-  toggleButtonState(cardSubmitButton, cardInputs); // Deshabilita el botón porque el form está vacío
-  cardInputs.forEach((input) => hidePopupInputError(cardForm, input));
-  utils.openModal(cardModal);
-};
-
-//utils
 const handleCardFormSubmit = (evt) => {
   evt.preventDefault();
-  const cardNameInput = cardModal.querySelector(".popup__input_type_card-name");
-  const cardLinkInput = cardModal.querySelector(".popup__input_type_card-url");
+  const name = cardForm.querySelector(".popup__input_type_card-name").value;
+  const link = cardForm.querySelector(".popup__input_type_card-url").value;
 
-  const newCard = {
-    name: cardNameInput.value,
-    link: cardLinkInput.value,
-  };
-  Card.renderCard(newCard, cardsList);
-  utils.closeModal(cardModal);
+  const card = new Card({ name, link }, "#card-template", handleCardClick);
+  cardsList.prepend(card.generateCard());
+
+  closeModal(cardModal);
   evt.target.reset();
+  // Importante: Después de resetear, hay que desactivar el botón otra vez
+  addFormValidator.toggleButtonState();
 };
 
-// Form Validation Functions & Logic (FV)
-const showPopupInputError = (form, inputElement, errorMessage) => {
-  const errorElement = form.querySelector(`.${inputElement.name}-input-error`);
-  inputElement.classList.add("popup__input_type_error");
-  if (errorElement) {
-    errorElement.textContent = errorMessage;
-    errorElement.classList.add("popup__input-error_active");
-  }
-};
+// 6. INSTANCIAR VALIDACIÓN
+const editFormValidator = new FormValidator(validationConfig, profileForm);
+const addFormValidator = new FormValidator(validationConfig, cardForm);
 
-const hidePopupInputError = (form, inputElement) => {
-  const errorElement = form.querySelector(`.${inputElement.name}-input-error`);
-  inputElement.classList.remove("popup__input_type_error");
-  if (errorElement) {
-    errorElement.textContent = "";
-    errorElement.classList.remove("popup__input-error_active");
-  }
-};
+editFormValidator.setEventListeners();
+addFormValidator.setEventListeners();
 
-//FV
-const toggleButtonState = (btn, inputsArray) => {
-  const allValid = inputsArray.every(
-    (inputElement) => inputElement.validity.valid
-  );
-  btn.disabled = !allValid;
-};
-
-// Nueva función genérica para añadir validación a cualquier formulario (FV)
-const enableValidation = (formElement, inputElements, submitButton) => {
-  inputElements.forEach((inputElement) => {
-    inputElement.addEventListener("input", () => {
-      if (!inputElement.validity.valid) {
-        showPopupInputError(
-          formElement,
-          inputElement,
-          inputElement.validationMessage
-        );
-      } else {
-        hidePopupInputError(formElement, inputElement);
-      }
-      toggleButtonState(submitButton, inputElements);
-    });
-  });
-
-  // Manejar el submit para prevenir envío si no es válido (FV)
-  formElement.addEventListener("submit", (evt) => {
-    const formValid = inputElements.every((input) => input.validity.valid);
-    if (!formValid) {
-      evt.preventDefault();
-    }
-  });
-};
-
-// Aplicar la validación a los formularios específicos (FV)
-enableValidation(profileForm, profileInputs, profileSubmitButton);
-enableValidation(cardForm, cardInputs, cardSubmitButton);
-
-// Event Listeners (utils)
-profileEditBtn.addEventListener("click", handleOpenEditModal);
-profileForm.addEventListener("submit", handleProfileFormSubmit);
-profileCloseBtn.addEventListener("click", () => {
-  utils.closeModal(profileModal);
+// 7. EVENT LISTENERS GLOBALES
+profileEditBtn.addEventListener("click", () => {
+  profileNameInput.value = profileTitle.textContent;
+  profileDescriptionInput.value = profileDescription.textContent;
+  openModal(profileModal);
 });
 
-cardAddBtn.addEventListener("click", handleOpenCardModal);
+cardAddBtn.addEventListener("click", () => openModal(cardModal));
+
+profileForm.addEventListener("submit", handleProfileFormSubmit);
 cardForm.addEventListener("submit", handleCardFormSubmit);
-cardCloseBtn.addEventListener("click", () => {
-  utils.closeModal(cardModal);
+
+// Cerrar cualquier modal con los botones X
+closeButtons.forEach((button) => {
+  const popup = button.closest(".popup");
+  button.addEventListener("click", () => closeModal(popup));
 });

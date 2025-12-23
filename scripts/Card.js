@@ -1,72 +1,63 @@
-import * as utils from "./utils.js";
-
-class Card {
-  //Constructor
-  constructor(image, templateSelector) {
-    this._image = image;
-    this._templateSelector = templateSelector;
-
-    // Image Modal Elements
-    this._imageModal = document.querySelector("#image-popup");
-    this._imagePicture = this._imageModal.querySelector(".popup__image");
-    this._imageCaption = this._imageModal.querySelector(".popup__caption");
-    this._imageCloseBtn = this._imageModal.querySelector(".popup__close");
-
-    //Event listener para cerrar el modal de imagen
-    this._imageCloseBtn.addEventListener("click", () => {
-      utils.closeModal(this._imageModal);
-    });
+// scripts/Card.js
+export default class Card {
+  constructor(data, cardSelector, handleCardClick) {
+    this._name = data.name;
+    this._link = data.link;
+    this._cardSelector = cardSelector;
+    this._handleCardClick = handleCardClick; // Función para el zoom de imagen
   }
 
-  //Inner Card methods
-  _handlerCardLikeBtn(btn) {
-    btn.addEventListener("click", () =>
-      btn.classList.toggle("card__like-button_is-active")
-    );
-  }
-
-  _handlerDeleteCardBtn(btn, card) {
-    btn.addEventListener("click", () => card.remove());
-  }
-
-  _handlerImageClick(image) {
-    image.addEventListener("click", () => {
-      this._imagePicture.src = image.src;
-      this._imagePicture.alt = image.alt;
-      this._imageCaption.textContent = image.alt;
-      utils.openModal(this._imageModal);
-    });
-  }
-
-  //Public Card method
-  getCardElement() {
-    this._element = this._templateSelector
-      .querySelector(".card")
+  // Método privado para obtener el marcado del template
+  _getTemplate() {
+    return document
+      .querySelector(this._cardSelector)
+      .content.querySelector(".card")
       .cloneNode(true);
+  }
 
-    const cardTitle = this._element.querySelector(".card__title");
+  // Métodos privados: Controladores de eventos
+  _handleLikeIcon() {
+    this._element
+      .querySelector(".card__like-button")
+      .classList.toggle("card__like-button_is-active");
+  }
+
+  _handleDeleteCard() {
+    this._element.remove();
+    this._element = null; // Limpiar referencia en memoria
+  }
+
+  // Método privado para añadir los detectores de eventos
+  _setEventListeners() {
+    this._element
+      .querySelector(".card__like-button")
+      .addEventListener("click", () => {
+        this._handleLikeIcon();
+      });
+
+    this._element
+      .querySelector(".card__delete-button")
+      .addEventListener("click", () => {
+        this._handleDeleteCard();
+      });
+
+    this._element
+      .querySelector(".card__image")
+      .addEventListener("click", () => {
+        this._handleCardClick(this._name, this._link);
+      });
+  }
+
+  // Método público: devuelve la tarjeta funcional
+  generateCard() {
+    this._element = this._getTemplate();
+    this._setEventListeners();
+
     const cardImage = this._element.querySelector(".card__image");
-    const cardLikeButton = this._element.querySelector(".card__like-button");
-    const cardDeleteButton = this._element.querySelector(
-      ".card__delete-button"
-    );
-
-    cardImage.src = this._image.link;
-    cardImage.alt = this._image.name;
-    cardTitle.textContent = this._image.name;
-
-    this._handlerCardLikeBtn(cardLikeButton);
-    this._handlerDeleteCardBtn(cardDeleteButton, this._element);
-    this._handlerImageClick(cardImage);
+    cardImage.src = this._link;
+    cardImage.alt = this._name;
+    this._element.querySelector(".card__title").textContent = this._name;
 
     return this._element;
   }
-
-  static renderCard(image, container) {
-    const cardTemplate = document.querySelector("#card-template").content;
-    const card = new Card(image, cardTemplate);
-    container.prepend(card.getCardElement());
-  }
 }
-
-export { Card };
