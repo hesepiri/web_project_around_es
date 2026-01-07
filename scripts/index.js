@@ -1,5 +1,6 @@
 import Card from "./Card.js";
 import FormValidator from "./FormValidator.js";
+import Section from "./Section.js";
 import { openModal, closeModal } from "./utils.js";
 import {
   initialCards,
@@ -13,7 +14,7 @@ import {
   profileDescriptionInput,
   profileTitle,
   profileDescription,
-  cardsList,
+  //cardsList,
   profileEditBtn,
   cardAddBtn,
   closeButtons,
@@ -46,11 +47,24 @@ const handleCardClick = (image) => {
   openModal(imageModal);
 };
 
+const cardsList = new Section(
+  {
+    items: initialCards,
+    renderer: (item) => {
+      const card = new Card(item, "#card-template", handleCardClick);
+      const cardElement = card.generateCard();
+      cardsList.addItem(cardElement);
+    },
+  },
+  ".cards__list"
+);
+cardsList.renderItems();
+
 // Renderizar tarjetas iniciales
 initialCards.forEach((data) => {
   const card = new Card(data, "#card-template", handleCardClick);
   const cardElement = card.generateCard();
-  cardsList.append(cardElement);
+  cardsList.addItem(cardElement);
 });
 
 // Formularios (Manejadores de Submit)
@@ -67,7 +81,7 @@ const handleCardFormSubmit = (evt) => {
   const link = cardForm.querySelector(".popup__input_type_card-url").value;
 
   const card = new Card({ name, link }, "#card-template", handleCardClick);
-  cardsList.prepend(card.generateCard());
+  cardsList.addItem(card.generateCard());
 
   closeModal(cardModal);
   evt.target.reset();

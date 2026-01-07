@@ -57,7 +57,7 @@ export const profileDescription = document.querySelector(
   ".profile__description"
 );
 
-export const cardsList = document.querySelector(".cards__list");
+//export const cardsList = document.querySelector(".cards__list");
 export const profileEditBtn = document.querySelector(".profile__edit-button");
 export const cardAddBtn = document.querySelector(".profile__add-button");
 export const closeButtons = document.querySelectorAll(".popup__close");
