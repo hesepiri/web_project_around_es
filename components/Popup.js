@@ -25,7 +25,7 @@ export default class Popup {
     // Cierre por botón X y por clic en el área oscura (overlay)
     this._popup.addEventListener("mousedown", (evt) => {
       if (
-        evt.target.classList.contains("popup__is-opened") ||
+        evt.target.classList.contains("popup_is-opened") ||
         evt.target.classList.contains("popup__close")
       ) {
         this.close();

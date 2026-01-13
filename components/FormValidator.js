@@ -66,4 +66,13 @@ export default class FormValidator {
       });
     });
   }
+
+  // Método público para limpiar errores y resetear el estado del botón
+  resetValidation() {
+    this.toggleButtonState(); // Maneja el botón
+
+    this._inputList.forEach((inputElement) => {
+      this._hideInputError(inputElement); // Oculta los errores rojos
+    });
+  }
 }
