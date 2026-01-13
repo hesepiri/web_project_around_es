@@ -1,8 +1,10 @@
 # **Tripleten web_project_around_es**
 
-## **Sprint 10 - Hector Pinedo**
+## **Sprint 11 - Hector Pinedo**
 
-### Refactorizando de codigo monolitico a modulos (Clases: Card y FormValidator | Archivos: utils y globalConsts)
+### Creacion de clases: Section.js, Popup.js, PopupWithImage.js, PopupWithForm.js, UserInfo.js
+
+### Transformacion de la clase Card.js
 
 ## **Tecnologias y tecnicas usadas**
 

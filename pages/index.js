@@ -1,9 +1,9 @@
-import Card from "./Card.js";
-//import FormValidator from "./FormValidator.js";
-import Section from "./Section.js";
-import UserInfo from "./UserInfo.js";
-import PopupWithImage from "./PopupWithImage.js";
-import PopupWithForm from "./PopupWithForm.js";
+import Card from "../components/Card.js";
+import FormValidator from "./FormValidator.js";
+import Section from "../components/Section.js";
+import UserInfo from "../components/UserInfo.js";
+import PopupWithImage from "../components/PopupWithImage.js";
+import PopupWithForm from "../components/PopupWithForm.js";
 //import { openModal, closeModal } from "./utils.js";
 import {
   initialCards,
@@ -21,7 +21,7 @@ import {
   //profileEditBtn,
   //cardAddBtn,
   //closeButtons,
-} from "./globalConsts.js";
+} from "../scripts/globalConsts.js";
 
 // Información del usuario
 const userInfo = new UserInfo({
