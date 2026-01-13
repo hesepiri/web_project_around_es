@@ -1,5 +1,7 @@
 # **Tripleten web_project_around_es**
 
+## Proyecto educativo, creacion de un sitio web donde el usuario puede añadir/eliminar/dar like a las imagenes, editar su nombre de perfil, y editar su rol/descripcion.
+
 ## **Sprint 11 - Hector Pinedo**
 
 ### Creacion de clases: Section.js, Popup.js, PopupWithImage.js, PopupWithForm.js, UserInfo.js
