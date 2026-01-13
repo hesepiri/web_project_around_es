@@ -78,14 +78,14 @@ profileEditBtn.addEventListener("click", () => {
   document.querySelector(".popup__input_type_description").value = about;
 
   // Usamos el validador específico de este formulario
-  formValidators["edit-profile-form"].toggleButtonState();
+  formValidators["edit-profile-form"].resetValidation();
 
   profilePopup.open();
 });
 
 cardAddBtn.addEventListener("click", () => {
   // Al abrir, el formulario de tarjeta siempre debe tener el botón bloqueado
-  formValidators["new-card-form"].toggleButtonState();
+  formValidators["new-card-form"].resetValidation();
   addCardPopup.open();
 });
 
