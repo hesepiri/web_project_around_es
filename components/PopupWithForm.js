@@ -1,4 +1,5 @@
 import Popup from "./Popup.js";
+
 export default class PopupWithForm extends Popup {
   constructor({ popupSelector, handleFormSubmit }) {
     super(popupSelector);
@@ -28,6 +29,6 @@ export default class PopupWithForm extends Popup {
   // Modifica el método padre close()
   close() {
     super.close();
-    this._form.reset();
+    this._form.reset(); // Requisito: reiniciar el formulario al cerrar
   }
 }
