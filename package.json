@@ -1,0 +1,27 @@
+{
+  "name": "web_project_around_es",
+  "version": "1.0.0",
+  "description": "Educational project",
+  "keywords": [
+    "TripleTen",
+    "Aroud",
+    "US",
+    "Hesepiri",
+    "project"
+  ],
+  "homepage": "https://github.com/hesepiri/web_project_around_es#readme",
+  "bugs": {
+    "url": "https://github.com/hesepiri/web_project_around_es/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hesepiri/web_project_around_es.git"
+  },
+  "license": "ISC",
+  "author": "Hector Sergio Pinedo Rivera",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "test": "\"echo \\\"Error: no test specified\\\" && exit 1\""
+  }
+}

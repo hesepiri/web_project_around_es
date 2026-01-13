@@ -13,6 +13,7 @@ export default class Card {
       .cloneNode(true);
   }
 
+  /*
   // Métodos privados: Controladores de eventos
   _handleLikeIcon() {
     this._element
@@ -24,25 +25,30 @@ export default class Card {
     this._element.remove();
     this._element = null; // Limpiar referencia en memoria
   }
+  */
 
   // Método privado para añadir los detectores de eventos
   _setEventListeners() {
     this._element
       .querySelector(".card__like-button")
-      .addEventListener("click", () => {
-        this._handleLikeIcon();
+      .addEventListener("click", (evt) => {
+        //this._handleLikeIcon();
+        evt.target.classList.toggle("card__like-button_is-active");
       });
 
     this._element
       .querySelector(".card__delete-button")
       .addEventListener("click", () => {
-        this._handleDeleteCard();
+        //this._handleDeleteCard();
+        this._element.remove();
+        this._element = null; // Limpiar referencia en memoria
       });
 
+    // Usamos el callback handleCardClick
     this._element
       .querySelector(".card__image")
       .addEventListener("click", () => {
-        this._handleCardClick(this._data);
+        this._handleCardClick(this._data.name, this._data.link);
       });
   }
 

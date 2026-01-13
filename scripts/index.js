@@ -1,25 +1,105 @@
 import Card from "./Card.js";
-import FormValidator from "./FormValidator.js";
+//import FormValidator from "./FormValidator.js";
 import Section from "./Section.js";
-import { openModal, closeModal } from "./utils.js";
+import UserInfo from "./UserInfo.js";
+import PopupWithImage from "./PopupWithImage.js";
+import PopupWithForm from "./PopupWithForm.js";
+//import { openModal, closeModal } from "./utils.js";
 import {
   initialCards,
   validationConfig,
-  profileModal,
-  cardModal,
-  imageModal,
-  profileForm,
-  cardForm,
-  profileNameInput,
-  profileDescriptionInput,
-  profileTitle,
-  profileDescription,
+  //profileModal,
+  //cardModal,
+  //imageModal,
+  //profileForm,
+  //cardForm,
+  //profileNameInput,
+  //profileDescriptionInput,
+  //profileTitle,
+  //profileDescription,
   //cardsList,
-  profileEditBtn,
-  cardAddBtn,
-  closeButtons,
+  //profileEditBtn,
+  //cardAddBtn,
+  //closeButtons,
 } from "./globalConsts.js";
 
+// Información del usuario
+const userInfo = new UserInfo({
+  nameSelector: ".profile__title",
+  aboutSelector: ".profile__description",
+});
+
+//Popup para ver la imagen ampliada
+const popupImage = new PopupWithImage(".#image-popup");
+popupImage.setEventListeners();
+
+const handleCardClick = (name, link) => {
+  popupImage.open(name, link);
+};
+
+//Renderizar tarjetas iniciales
+const cardsList = new Section(
+  {
+    items: initialCards,
+    renderer: (item) => {
+      const card = new Card(item, "#card-template", handleCardClick);
+      const cardElement = card.generateCard();
+      cardsList.addItem(cardElement);
+    },
+  },
+  ".cards__list"
+);
+cardsList.renderItems();
+
+//Popup formulario perfil
+const profilePopup = new PopupWithForm({
+  popupSelector: ".#profile-popup",
+  handleFormSubmit: (formData) => {
+    userInfo.setUserInfo({
+      name: formData.name,
+      about: formData.about,
+    });
+    profilePopup.close();
+  },
+});
+profilePopup.setEventListeners();
+
+//Popup formulario nueva tarjeta
+const addCardPopup = new PopupWithForm({
+  popupSelector: "#new-card-popup",
+  handleFormSubmit: (formData) => {
+    const card = new Card(
+      {
+        name: formData.profileTitle,
+        link: formData.profileDescription,
+      },
+      "#card-template",
+      handleCardClick
+    );
+
+    cardsList.addItem(card.generateCard());
+    addCardPopup.close();
+  },
+});
+addCardPopup.setEventListeners();
+
+// Event listeners para abrir los popups
+document
+  .querySelector(".profile__edit-button")
+  .addEventListener("click", () => {
+    const currentUserInfo = userInfo.getUserInfo();
+    document.querySelector(".popup__input_type_name").value =
+      currentUserInfo.name;
+    document.querySelector(".popup__input_type_name").value =
+      currentUserInfo.about;
+    profilePopup.open();
+  });
+
+document.querySelector(".profile__add-button").addEventListener("click", () => {
+  addCardPopup.open();
+});
+
+/*
 // Objeto para guardar instancias de validadores por formulario
 const formValidators = {};
 
@@ -52,7 +132,10 @@ const cardsList = new Section(
     items: initialCards,
     renderer: (item) => {
       const card = new Card(item, "#card-template", handleCardClick);
-      const cardElement = card.generateCard();
+      /*
+      const card = item.isOwner ? new UserCard(item, "card-template_type_user") : new DefaultCard(item, "card-template_type_default");
+       */
+/*const cardElement = card.generateCard();
       cardsList.addItem(cardElement);
     },
   },
@@ -105,3 +188,4 @@ closeButtons.forEach((button) => {
   const popup = button.closest(".popup");
   button.addEventListener("click", () => closeModal(popup));
 });
+*/
