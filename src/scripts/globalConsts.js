@@ -37,27 +37,5 @@ export const validationConfig = {
   errorClass: "popup__input-error_active",
 };
 
-// Exportamos modales, formularios, inputs y otros selectores del DOM
-export const profileModal = document.querySelector("#edit-popup");
-export const cardModal = document.querySelector("#new-card-popup");
-export const imageModal = document.querySelector("#image-popup");
-
-export const profileForm = document.querySelector("#edit-profile-form");
-export const cardForm = document.querySelector("#new-card-form");
-
-export const profileNameInput = profileForm.querySelector(
-  ".popup__input_type_name"
-);
-export const profileDescriptionInput = profileForm.querySelector(
-  ".popup__input_type_description"
-);
-
-export const profileTitle = document.querySelector(".profile__title");
-export const profileDescription = document.querySelector(
-  ".profile__description"
-);
-
-//export const cardsList = document.querySelector(".cards__list");
 export const profileEditBtn = document.querySelector(".profile__edit-button");
 export const cardAddBtn = document.querySelector(".profile__add-button");
-export const closeButtons = document.querySelectorAll(".popup__close");
