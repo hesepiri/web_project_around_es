@@ -1,13 +1,12 @@
 export default class Section {
-  constructor({ items, renderer }, containerSelector) {
-    this._items = items; // El array de datos (initialCards)
+  constructor({ renderer }, containerSelector) {
     this._renderer = renderer; // La función que crea la tarjeta
     this._container = document.querySelector(containerSelector); // Dónde las pondremos
   }
 
-  // Método público para dibujar todos los elementos iniciales
-  renderItems() {
-    this._items.forEach((item) => {
+  // Método público para dibujar todos los elementos iniciales - Actualizando para que reciba items
+  renderItems(items) {
+    items.forEach((item) => {
       this._renderer(item);
     });
   }

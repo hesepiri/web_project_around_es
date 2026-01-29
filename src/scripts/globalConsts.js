@@ -39,3 +39,12 @@ export const validationConfig = {
 
 export const profileEditBtn = document.querySelector(".profile__edit-button");
 export const cardAddBtn = document.querySelector(".profile__add-button");
+
+//Api config
+export const apiConfig = {
+  baseUrl: "https://around-api.es.tripleten-services.com/v1",
+  headers: {
+    authorization: "0e843d05-0a28-4346-b14e-6bb1d8f2ecac",
+    "Content-Type": "application/json",
+  },
+};
