@@ -20,5 +20,5 @@ export const apiConfig = {
 };
 
 // Selectores de botones
-export const profileEditBtn = document.querySelector("#profile-edit-btn");
-export const cardAddBtn = document.querySelector("#card-add-btn");
+export const profileEditBtn = document.querySelector(".profile__edit-button");
+export const cardAddBtn = document.querySelector(".profile__add-button");
