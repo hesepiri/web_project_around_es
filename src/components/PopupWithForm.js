@@ -6,7 +6,8 @@ export default class PopupWithForm extends Popup {
     this._handleFormSubmit = handleFormSubmit;
     this._form = this._popup.querySelector(".popup__form");
     this._inputList = Array.from(this._form.querySelectorAll(".popup__input"));
-    //Sprint 12 - Guardamos el texto original del botón
+
+    // Sprint 12 - Guardamos el texto original del botón
     this._submitButton = this._form.querySelector(".popup__button");
     this._submitButtonText = this._submitButton.textContent;
   }
@@ -20,7 +21,6 @@ export default class PopupWithForm extends Popup {
     return formValues;
   }
 
-  // Modifica el método padre setEventListeners()
   setEventListeners() {
     super.setEventListeners();
     this._form.addEventListener("submit", (evt) => {
@@ -29,7 +29,7 @@ export default class PopupWithForm extends Popup {
     });
   }
 
-  //Sprint 12 - Metodo para cambiar el texto durante la carga
+  // Sprint 12 - Método para cambiar el texto durante la carga
   renderLoading(isLoading, loadingText = "Guardando...") {
     if (isLoading) {
       this._submitButton.textContent = loadingText;
@@ -38,9 +38,8 @@ export default class PopupWithForm extends Popup {
     }
   }
 
-  // Modifica el método padre close()
   close() {
     super.close();
-    this._form.reset(); // Requisito: reiniciar el formulario al cerrar
+    this._form.reset();
   }
 }
