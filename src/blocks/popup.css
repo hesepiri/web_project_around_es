@@ -91,7 +91,7 @@
   display: flex;
 }
 
-.popup__content_content_image {
+.popup__content_type_image {
   max-width: 75vw;
   max-height: 75vh;
   height: auto;
@@ -180,8 +180,50 @@
     line-height: 22px;
   }
 
-  .popup__content_content_image {
+  .popup__content_type_image {
     max-width: 75vw;
     padding: 0;
   }
+}
+
+/* Sprint 12 - Popup de conirmacion */
+/* 1. Hacemos la cajita más compacta y centrada */
+#delete-confirmation-popup .popup__content {
+  padding: 34px 36px; /* Espacio interno balanceado */
+  max-width: 430px; /* Ancho máximo más pequeño que los formularios normales */
+  min-height: auto; /* Que la altura se ajuste al contenido, no fija */
+  box-sizing: border-box; /* Para que el padding no rompa las medidas */
+  display: flex;
+  flex-direction: column;
+  justify-content: center; /* Centrar verticalmente si sobra espacio */
+}
+
+/* 2. Ajustamos el título */
+#delete-confirmation-popup .popup__title {
+  margin: 0 0 48px 0; /* Margen inferior para separarlo del botón */
+  text-align: left; /* O 'center' si prefieres que esté centrado */
+  font-size: 24px;
+  line-height: 1.2;
+}
+
+/* 3. Quitamos márgenes molestos del formulario */
+#delete-confirmation-popup .popup__form {
+  margin: 0;
+  padding: 0;
+}
+
+/* 4. Botón "Sí": Elegante y claro */
+#delete-confirmation-popup .popup__button {
+  margin: 0;
+  width: 100%; /* Que ocupe todo el ancho disponible */
+  height: 50px; /* Altura cómoda para el clic */
+  font-size: 18px;
+  font-weight: 400;
+  border-radius: 2px; /* Bordes sutilmente redondeados (estilo TripleTen) */
+  cursor: pointer;
+  transition: opacity 0.3s ease; /* Transición suave al pasar el mouse */
+}
+
+#delete-confirmation-popup .popup__button:hover {
+  opacity: 0.8;
 }
