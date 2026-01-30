@@ -5,6 +5,7 @@ import UserInfo from "../components/UserInfo.js";
 import FormValidator from "../components/FormValidator.js";
 import PopupWithImage from "../components/PopupWithImage.js";
 import PopupWithForm from "../components/PopupWithForm.js";
+import PopupWithConfirmation from "../components/PopupWithConfirmation.js"; // Nueva clase para importar
 import {
   apiConfig,
   validationConfig,
@@ -21,9 +22,34 @@ const userInfo = new UserInfo({
   avatarSelector: ".profile__image",
 });
 
+// Popup de confirmación de eliminación de tarjeta
+const deleteCardPopup = new PopupWithConfirmation("#delete-confirmation-popup");
+deleteCardPopup.setEventListeners();
+
 // Popup para ver la imagen ampliada
 const popupImage = new PopupWithImage("#image-popup");
 popupImage.setEventListeners();
+
+const handleCardDelete = (cardInstance) => {
+  // Abrimos el popup
+  deleteCardPopup.open();
+
+  // Configuramos la acción del botón "Sí" para esta tarjeta específica
+  deleteCardPopup.setSubmitAction(() => {
+    // Llamamos a la API para eliminar la tarjeta del servidor
+    api
+      .deleteCard(cardInstance.getCardId())
+      .then(() => {
+        // Si el servidor dice 200 OK, entonces borramos la tarjeta del DOM
+        cardInstance.deleteCard();
+        // Cerramos el popup de confirmación
+        deleteCardPopup.close();
+      })
+      .catch((err) => {
+        console.log(`Error al eliminar la tarjeta: ${err}`);
+      });
+  });
+};
 
 const handleCardClick = (name, link) => {
   popupImage.open(name, link);
@@ -31,9 +57,23 @@ const handleCardClick = (name, link) => {
 
 // Renderizar tarjetas iniciales (Section)
 const cardsList = new Section(
-  {
+  /*{
     renderer: (item) => {
       const card = new Card(item, "#card-template", handleCardClick);
+      cardsList.addItem(card.generateCard());
+    },
+  },
+  ".cards__list",*/
+  {
+    renderer: (item) => {
+      // Obtenemos MI ID actual (lo guardamos en userInfo al inicio)
+      const card = new Card(
+        item,
+        "#card-template",
+        handleCardClick,
+        handleCardDelete, // Pasamos la función para eliminar
+        userInfo.getUserId(), // Le pasamos mi ID actual (ahora de UserInfo)
+      );
       cardsList.addItem(card.generateCard());
     },
   },
@@ -87,7 +127,14 @@ const addCardPopup = new PopupWithForm({
         link: inputValues.link,
       })
       .then((newCardData) => {
-        const card = new Card(newCardData, "#card-template", handleCardClick);
+        // Aqui tambien faltan argumentos
+        const card = new Card(
+          newCardData,
+          "#card-template",
+          handleCardClick,
+          handleCardDelete, // Faltaba este argumento, se añade la función para eliminar
+          userInfo.getUserId(), // Faltaba este argumento, se pasa mi ID actual
+        );
         cardsList.addItem(card.generateCard());
         addCardPopup.close();
       })

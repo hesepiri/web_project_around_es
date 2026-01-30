@@ -11,6 +11,7 @@ export default class UserInfo {
       name: this._nameElement.textContent,
       about: this._aboutElement.textContent,
       avatar: this._avatarElement.src, //Sprint 12 - Agregado avatar
+      _id: this._id, //Sprint 12 - Agregado ID
     };
   }
 
