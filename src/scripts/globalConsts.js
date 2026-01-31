@@ -1,16 +1,12 @@
-// Archivo de constantes y selectores
-
-// Configuración para la validación de formularios
 export const validationConfig = {
   formSelector: ".popup__form",
   inputSelector: ".popup__input",
   submitButtonSelector: ".popup__button",
   inactiveButtonClass: "popup__button_disabled",
   inputErrorClass: "popup__input_type_error",
-  errorClass: "popup__error_visible",
+  errorClass: "popup__input-error_active", // 👈 CORREGIDO: Coincide con popup.css
 };
 
-// Configuración de la API
 export const apiConfig = {
   baseUrl: "https://around-api.es.tripleten-services.com/v1",
   headers: {
@@ -19,6 +15,5 @@ export const apiConfig = {
   },
 };
 
-// Selectores de botones
 export const profileEditBtn = document.querySelector(".profile__edit-button");
 export const cardAddBtn = document.querySelector(".profile__add-button");

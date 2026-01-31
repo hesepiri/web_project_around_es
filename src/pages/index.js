@@ -6,14 +6,13 @@ import FormValidator from "../components/FormValidator.js";
 import PopupWithImage from "../components/PopupWithImage.js";
 import PopupWithForm from "../components/PopupWithForm.js";
 import PopupWithConfirmation from "../components/PopupWithConfirmation.js";
-import {
-  apiConfig,
-  validationConfig,
-  profileEditBtn,
-  cardAddBtn,
-} from "../scripts/globalConsts.js";
+import { apiConfig, validationConfig } from "../scripts/globalConsts.js";
 
+/* -------------------------------------------------------------------------- */
+/* 1. VARIABLES GLOBALES                                                      */
+/* -------------------------------------------------------------------------- */
 const api = new Api(apiConfig);
+const formValidators = {};
 
 const userInfo = new UserInfo({
   nameSelector: ".profile__title",
@@ -21,6 +20,24 @@ const userInfo = new UserInfo({
   avatarSelector: ".profile__image",
 });
 
+/* -------------------------------------------------------------------------- */
+/* 2. FUNCIONES DE VALIDACIÓN                                                 */
+/* -------------------------------------------------------------------------- */
+const enableValidation = (config) => {
+  const formList = Array.from(document.querySelectorAll(config.formSelector));
+  formList.forEach((formElement) => {
+    const validator = new FormValidator(config, formElement);
+    const formName = formElement.getAttribute("id");
+    formValidators[formName] = validator;
+    validator.setEventListeners();
+  });
+};
+
+enableValidation(validationConfig);
+
+/* -------------------------------------------------------------------------- */
+/* 3. POPUPS Y LOGICA DE TARJETAS                                             */
+/* -------------------------------------------------------------------------- */
 const deleteCardPopup = new PopupWithConfirmation("#delete-confirmation-popup");
 deleteCardPopup.setEventListeners();
 
@@ -36,15 +53,12 @@ const handleCardDelete = (cardInstance) => {
         cardInstance.deleteCard();
         deleteCardPopup.close();
       })
-      .catch((err) => {
-        console.log(`Error al eliminar la tarjeta: ${err}`);
-      });
+      .catch((err) => console.log(`Error al eliminar: ${err}`));
   });
 };
 
 const handleCardLike = (cardInstance) => {
   const isLiked = cardInstance.isLiked();
-
   if (isLiked) {
     api
       .removeLike(cardInstance.getCardId())
@@ -85,25 +99,40 @@ const cardsList = new Section(
   ".cards__list",
 );
 
+/* -------------------------------------------------------------------------- */
+/* 4. CARGA INICIAL (¡AQUÍ ESTABA EL FANTASMA! 👻)                            */
+/* -------------------------------------------------------------------------- */
 Promise.all([api.getUserInfo(), api.getInitialCards()])
   .then(([userData, cards]) => {
     userInfo.setUserInfo(userData);
-    document.querySelector(".profile__info").style.visibility = "visible";
-    document.querySelector(".profile__image").style.visibility = "visible";
-    document.querySelector(".profile__info").style.opacity = "1";
-    document.querySelector(".profile__image").style.opacity = "1";
+
+    // 👇 SOLUCIÓN: Seleccionamos y forzamos la aparición
+    const profileInfo = document.querySelector(".profile__info");
+    const profileImage = document.querySelector(".profile__image");
+
+    if (profileInfo) {
+      profileInfo.style.visibility = "visible";
+      profileInfo.style.opacity = "1"; // ¡Esto faltaba!
+    }
+    if (profileImage) {
+      profileImage.style.visibility = "visible";
+      profileImage.style.opacity = "1"; // ¡Esto faltaba!
+    }
 
     cardsList.renderItems(cards.reverse());
   })
-  .catch((err) => {
-    console.log(`Error al cargar la información inicial: ${err}`);
-  });
+  .catch((err) => console.log(`Error inicial: ${err}`));
 
+/* -------------------------------------------------------------------------- */
+/* 5. POPUPS DE FORMULARIOS (CORREGIDO)                                       */
+/* -------------------------------------------------------------------------- */
+
+// Editar Perfil
 const profilePopup = new PopupWithForm({
   popupSelector: "#edit-popup",
   handleFormSubmit: (inputValues) => {
     profilePopup.renderLoading(true);
-
+    // CORRECCIÓN: Usamos .name y .about porque en HTML input name="name" y name="about"
     api
       .editProfile({
         name: inputValues.name,
@@ -113,21 +142,18 @@ const profilePopup = new PopupWithForm({
         userInfo.setUserInfo(userData);
         profilePopup.close();
       })
-      .catch((err) => {
-        console.log(`Error al editar el perfil: ${err}`);
-      })
-      .finally(() => {
-        profilePopup.renderLoading(false);
-      });
+      .catch((err) => console.log(err))
+      .finally(() => profilePopup.renderLoading(false));
   },
 });
 profilePopup.setEventListeners();
 
+// Nueva Tarjeta
 const addCardPopup = new PopupWithForm({
   popupSelector: "#new-card-popup",
   handleFormSubmit: (inputValues) => {
     addCardPopup.renderLoading(true);
-
+    // CORRECCIÓN: Usamos .name y .link porque en HTML input name="name" y name="link"
     api
       .addCard({
         name: inputValues.name,
@@ -145,69 +171,85 @@ const addCardPopup = new PopupWithForm({
         cardsList.addItem(card.generateCard());
         addCardPopup.close();
       })
-      .catch((err) => {
-        console.log(`Error al agregar la tarjeta: ${err}`);
-      })
-      .finally(() => {
-        addCardPopup.renderLoading(false);
-      });
+      .catch((err) => console.log(err))
+      .finally(() => addCardPopup.renderLoading(false));
   },
 });
 addCardPopup.setEventListeners();
 
+// Avatar
 const avatarPopup = new PopupWithForm({
   popupSelector: "#avatar-popup",
   handleFormSubmit: (inputValues) => {
     avatarPopup.renderLoading(true);
-
+    // CORRECCIÓN: Usamos .avatar porque en HTML input name="avatar"
     api
       .updateAvatar(inputValues.avatar)
       .then((userData) => {
         userInfo.setUserInfo(userData);
         avatarPopup.close();
       })
-      .catch((err) => {
-        console.log(`Error al actualizar el avatar: ${err}`);
-      })
-      .finally(() => {
-        avatarPopup.renderLoading(false);
-      });
+      .catch((err) => console.log(err)) // ¡Aquí verás si hay otro error!
+      .finally(() => avatarPopup.renderLoading(false));
   },
 });
 avatarPopup.setEventListeners();
 
-profileEditBtn.addEventListener("click", () => {
-  const { name, about } = userInfo.getUserInfo();
-  document.querySelector(".popup__input_type_name").value = name;
-  document.querySelector(".popup__input_type_description").value = about;
+/* -------------------------------------------------------------------------- */
+/* 6. EVENT LISTENERS                                                         */
+/* -------------------------------------------------------------------------- */
+const localProfileEditBtn = document.querySelector(".profile__edit-button");
+const localCardAddBtn = document.querySelector(".profile__add-button");
+const localAvatarEditBtn = document.querySelector(
+  ".profile__image-edit-button",
+);
 
-  formValidators["edit-profile-form"].resetValidation();
-  profilePopup.open();
-});
+// Listener Perfil
+if (localProfileEditBtn) {
+  localProfileEditBtn.addEventListener("click", () => {
+    const { name, about } = userInfo.getUserInfo();
+    const nameInput = document.querySelector("#name-input");
+    const aboutInput = document.querySelector("#about-input");
 
-cardAddBtn.addEventListener("click", () => {
-  formValidators["new-card-form"].resetValidation();
-  addCardPopup.open();
-});
+    if (nameInput) nameInput.value = name;
+    if (aboutInput) aboutInput.value = about;
 
-const avatarEditBtn = document.querySelector(".profile__image-edit-button");
+    try {
+      if (formValidators["edit-profile-form"]) {
+        formValidators["edit-profile-form"].resetValidation();
+      }
+    } catch (e) {
+      console.warn("Error validación perfil", e);
+    }
 
-avatarEditBtn.addEventListener("click", () => {
-  formValidators["avatar-form"].resetValidation();
-  avatarPopup.open();
-});
-
-const formValidators = {};
-
-const enableValidation = (config) => {
-  const formList = Array.from(document.querySelectorAll(config.formSelector));
-  formList.forEach((formElement) => {
-    const validator = new FormValidator(config, formElement);
-    const formName = formElement.getAttribute("id");
-
-    formValidators[formName] = validator;
-    validator.setEventListeners();
+    profilePopup.open();
   });
-};
+}
 
-enableValidation(validationConfig);
+// Listener Tarjeta
+if (localCardAddBtn) {
+  localCardAddBtn.addEventListener("click", () => {
+    try {
+      if (formValidators["new-card-form"]) {
+        formValidators["new-card-form"].resetValidation();
+      }
+    } catch (e) {
+      console.warn("Error validación tarjeta", e);
+    }
+    addCardPopup.open();
+  });
+}
+
+// Listener Avatar
+if (localAvatarEditBtn) {
+  localAvatarEditBtn.addEventListener("click", () => {
+    try {
+      if (formValidators["avatar-form"]) {
+        formValidators["avatar-form"].resetValidation();
+      }
+    } catch (e) {
+      console.warn("Error validación avatar", e);
+    }
+    avatarPopup.open();
+  });
+}

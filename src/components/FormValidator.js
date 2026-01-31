@@ -1,11 +1,5 @@
 export default class FormValidator {
   constructor(config, formElement) {
-    if (!formElement) {
-      console.error(
-        "FormValidator Error: El elemento del formulario proporcionado es null.",
-      );
-      return;
-    }
     this._config = config;
     this._formElement = formElement;
     this._inputList = Array.from(
@@ -16,23 +10,32 @@ export default class FormValidator {
     );
   }
 
-  // Métodos privados para procesar el formulario
+  // Busca el elemento de error usando el ID del input + "-error"
+  // Ejemplo: input id="name-input" -> busca #name-input-error
+  _getErrorElement(inputElement) {
+    return this._formElement.querySelector(`#${inputElement.id}-error`);
+  }
+
   _showInputError(inputElement, errorMessage) {
-    const errorElement = this._formElement.querySelector(
-      `.${inputElement.name}-input-error`,
-    );
+    const errorElement = this._getErrorElement(inputElement);
+
     inputElement.classList.add(this._config.inputErrorClass);
-    errorElement.textContent = errorMessage;
-    errorElement.classList.add(this._config.errorClass);
+
+    if (errorElement) {
+      errorElement.textContent = errorMessage;
+      errorElement.classList.add(this._config.errorClass);
+    }
   }
 
   _hideInputError(inputElement) {
-    const errorElement = this._formElement.querySelector(
-      `.${inputElement.name}-input-error`,
-    );
+    const errorElement = this._getErrorElement(inputElement);
+
     inputElement.classList.remove(this._config.inputErrorClass);
-    errorElement.textContent = "";
-    errorElement.classList.remove(this._config.errorClass);
+
+    if (errorElement) {
+      errorElement.textContent = "";
+      errorElement.classList.remove(this._config.errorClass);
+    }
   }
 
   _checkInputValidity(inputElement) {
@@ -50,15 +53,15 @@ export default class FormValidator {
   toggleButtonState() {
     if (this._hasInvalidInput()) {
       this._buttonElement.disabled = true;
+      this._buttonElement.classList.add(this._config.inactiveButtonClass);
     } else {
       this._buttonElement.disabled = false;
+      this._buttonElement.classList.remove(this._config.inactiveButtonClass);
     }
   }
 
-  // Método público para activar la validación
   setEventListeners() {
     this.toggleButtonState();
-
     this._inputList.forEach((inputElement) => {
       inputElement.addEventListener("input", () => {
         this._checkInputValidity(inputElement);
@@ -67,12 +70,10 @@ export default class FormValidator {
     });
   }
 
-  // Método público para limpiar errores y resetear el estado del botón
   resetValidation() {
-    this.toggleButtonState(); // Maneja el botón
-
+    this.toggleButtonState();
     this._inputList.forEach((inputElement) => {
-      this._hideInputError(inputElement); // Oculta los errores rojos
+      this._hideInputError(inputElement);
     });
   }
 }
