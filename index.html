@@ -5,6 +5,7 @@
     <meta content="width=device-width, initial-scale=1.0" name="viewport" />
     <meta content="ie=edge" http-equiv="X-UA-Compatible" />
     <title>Around The U.S.</title>
+    <link href="./src/vendor/normalize.css" rel="stylesheet" />
     <link href="./src/pages/index.css" rel="stylesheet" />
   </head>
   <body class="page">
@@ -13,16 +14,15 @@
         <img
           alt="Logotipo Around The U.S."
           class="logo header__logo"
-          src="./images/logo.svg"
+          src="./src/images/logo.svg"
         />
       </header>
       <main class="content">
         <section class="profile page__section">
-          <!-- Avatar -->
           <div class="profile__avatar-container">
             <img
               class="profile__image"
-              src="./images/avatar.jpg"
+              src="./src/images/avatar.jpg"
               alt="Avatar"
             />
             <button
@@ -30,8 +30,8 @@
               type="button"
               aria-label="Editar foto de perfil"
             ></button>
+            <div class="profile__overlay"></div>
           </div>
-          <!-- O -->
           <div class="profile__info">
             <h1 class="profile__title">Cargando...</h1>
             <button
@@ -54,6 +54,7 @@
       <footer class="footer page__section">
         <p class="footer__copyright">© 2026 Around The U.S.</p>
       </footer>
+
       <div class="popup" id="edit-popup">
         <div class="popup__content">
           <button
@@ -62,10 +63,15 @@
             type="button"
           ></button>
           <h3 class="popup__title">Editar perfil</h3>
-          <!-- Form Edit Profile -->
-          <form class="popup__form" id="edit-profile-form">
+          <form
+            class="popup__form"
+            name="edit-profile"
+            id="edit-profile-form"
+            novalidate
+          >
             <input
               class="popup__input popup__input_type_name"
+              id="name-input"
               name="name"
               placeholder="Nombre"
               type="text"
@@ -73,26 +79,31 @@
               maxlength="40"
               required
             />
-            <span class="name-input-error popup__input-error"
-              >Este campo es obligatorio.</span
-            >
+            <span
+              class="name-input-error popup__input-error"
+              id="name-input-error"
+            ></span>
+
             <input
-              class="popup__input popup__input_type_description"
-              name="description"
+              class="popup__input popup__input_type_about"
+              id="about-input"
+              name="about"
               placeholder="Acerca de mí"
               type="text"
               minlength="2"
               maxlength="200"
               required
             />
-            <span class="description-input-error popup__input-error"
-              >Este campo es obligatorio.</span
-            >
+            <span
+              class="about-input-error popup__input-error"
+              id="about-input-error"
+            ></span>
+
             <button class="button popup__button" type="submit">Guardar</button>
           </form>
-          <!-- Form Edit Profile -->
         </div>
       </div>
+
       <div class="popup" id="new-card-popup">
         <div class="popup__content">
           <button
@@ -101,37 +112,47 @@
             type="button"
           ></button>
           <h3 class="popup__title">Nuevo lugar</h3>
-          <!-- Form New/Add Card -->
-          <form class="popup__form" id="new-card-form">
+          <form
+            class="popup__form"
+            name="new-card"
+            id="new-card-form"
+            novalidate
+          >
             <input
               class="popup__input popup__input_type_card-name"
-              name="titulo"
+              id="card-name-input"
+              name="name"
               placeholder="Título"
               type="text"
               minlength="2"
               maxlength="30"
               required
             />
-            <span class="titulo-input-error popup__input-error"
-              >Este campo es obligatorio.</span
-            >
+            <span
+              class="card-name-input-error popup__input-error"
+              id="card-name-input-error"
+            ></span>
+
             <input
-              class="popup__input popup__input_type_card-url"
+              class="popup__input popup__input_type_card-link"
+              id="card-link-input"
               name="link"
               placeholder="Enlace a la imagen"
               type="url"
               required
             />
-            <span class="link-input-error popup__input-error"
-              >Este campo es obligatorio.</span
-            >
+            <span
+              class="card-link-input-error popup__input-error"
+              id="card-link-input-error"
+            ></span>
+
             <button class="button popup__button" type="submit" disabled>
               Crear
             </button>
           </form>
-          <!-- Form New/Add Card -->
         </div>
       </div>
+
       <div class="popup" id="image-popup">
         <div class="popup__content popup__content_type_image">
           <button
@@ -144,39 +165,46 @@
         </div>
       </div>
     </div>
-    <!-- Modules -->
+
     <script type="module" src="./src/pages/index.js"></script>
-    <!-- Modules -->
+
     <template id="card-template">
       <li class="card">
-        <img class="card__image" src="" alt="" />
         <button
           aria-label="Eliminar tarjeta"
           class="card__delete-button"
           type="button"
         ></button>
+        <img class="card__image" src="" alt="" />
         <div class="card__description">
           <h2 class="card__title"></h2>
-          <button
-            aria-label="Botón Me gusta"
-            class="card__like-button"
-            type="button"
-          ></button>
+          <div class="card__like-container">
+            <button
+              aria-label="Botón Me gusta"
+              class="card__like-button"
+              type="button"
+            ></button>
+            <span class="card__like-count">0</span>
+          </div>
         </div>
       </li>
     </template>
-    <!-- Popup confirmacion de borrado - Sprint 12 -->
+
     <div class="popup" id="delete-confirmation-popup">
       <div class="popup__content">
         <button class="popup__close" type="button" aria-label="Cerrar"></button>
         <h2 class="popup__title">¿Estás seguro?</h2>
-        <form class="popup__form" name="delete-confirmation-form" novalidate>
+        <form
+          class="popup__form"
+          name="delete-confirmation-form"
+          id="delete-form"
+          novalidate
+        >
           <button class="popup__button" type="submit">Sí</button>
         </form>
       </div>
     </div>
-    <!-- O -->
-    <!-- Popup Avatar - Sprint 12 -->
+
     <div class="popup" id="avatar-popup">
       <div class="popup__content">
         <button class="popup__close" type="button" aria-label="Cerrar"></button>
@@ -190,16 +218,18 @@
           <input
             type="url"
             name="avatar"
-            id="avatar-url"
-            class="popup__input popup__input_type_url"
+            id="avatar-input"
+            class="popup__input popup__input_type_avatar"
             placeholder="Enlace a la imagen"
             required
           />
-          <span class="avatar-input-error popup__input-error"></span>
+          <span
+            class="avatar-input-error popup__input-error"
+            id="avatar-input-error"
+          ></span>
           <button class="popup__button" type="submit">Guardar</button>
         </form>
       </div>
     </div>
-    <!-- O -->
   </body>
 </html>

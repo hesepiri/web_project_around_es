@@ -107,7 +107,7 @@ const profilePopup = new PopupWithForm({
     api
       .editProfile({
         name: inputValues.name,
-        about: inputValues.description,
+        about: inputValues.about,
       })
       .then((userData) => {
         userInfo.setUserInfo(userData);
@@ -130,7 +130,7 @@ const addCardPopup = new PopupWithForm({
 
     api
       .addCard({
-        name: inputValues.titulo,
+        name: inputValues.name,
         link: inputValues.link,
       })
       .then((newCardData) => {
