@@ -1,0 +1,11 @@
+# Dependencias de Node (¡Nunca subir esto!)
+node_modules/
+
+# Archivos de sistema de Mac (basura)
+.DS_Store
+
+# Archivos de sistema de Windows (basura)
+Thumbs.db
+
+# Configuración local de VS Code (opcional)
+.vscode/
