@@ -6,7 +6,7 @@ export default class PopupWithConfirmation extends Popup {
     this._form = this._popup.querySelector(".popup__form");
   }
 
-  // Este método es la CLAVE: nos permite cambiar qué hace el botón "Sí"
+  // Este método es la CLAVE: nos permite cambiar qué hace el botón de confirmar
   // cada vez que abrimos el popup para una tarjeta diferente.
   setSubmitAction(action) {
     this._handleFormSubmit = action;
