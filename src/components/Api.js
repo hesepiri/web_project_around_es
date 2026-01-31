@@ -78,7 +78,7 @@ export default class Api {
   }
 
   // Metodo para remover like a una tarjeta
-  remvoveLike(cardId) {
+  removeLike(cardId) {
     return fetch(`${this._baseUrl}/cards/${cardId}/likes`, {
       method: "DELETE",
       headers: this._headers,

@@ -38,25 +38,45 @@ En este **Sprint 12**, el proyecto dio un salto técnico importante al transicio
 - **JavaScript (ES6+):**
   - **Fetch API:** Para realizar peticiones HTTP asíncronas.
   - **Promises:** Manejo de flujos asíncronos.
-  - **POO (Programación Orientada a Objetos):** Arquitectura modular (`Api.js`, `Card.js`, `Section.js`, etc.).
-- **HTML5 & CSS3:** Implementación semántica y metodología **BEM**.
-- **Git & GitHub:** Control de versiones.
+  - **POO (Programación Orientada a Objetos):** Arquitectura modular (`Api.js`, `Card.js`, `Section.js`, `Popup.js`, etc.).
+- **Webpack:** Empaquetador de módulos y activos (minificación de CSS/JS, transpilación con Babel).
+- **HTML5 & CSS3:** Implementación semántica y metodología **BEM** (Block Element Modifier).
+- **Git & GitHub:** Control de versiones y despliegue.
 
 ## ⚙️ Instalación y Ejecución Local
 
-Este proyecto utiliza módulos nativos de JavaScript (ES6), por lo que no requiere procesos de construcción (build) ni instalación de dependencias externas.
+Si deseas correr este proyecto en tu máquina local:
 
 1.  **Clona el repositorio:**
 
     ```bash
-    git clone <SSH obtenido de GitHub>
+    git clone [https://github.com/TuUsuario/web_project_around.git](https://github.com/TuUsuario/web_project_around.git)
     ```
 
-2.  **Ejecuta el proyecto:**
-    - Abre el archivo `index.html` directamente en tu navegador.
-    - **Recomendado:** Usa la extensión "Live Server" de VS Code para una mejor experiencia.
+2.  **Instala las dependencias (NPM):**
+
+    ```bash
+    npm install
+    ```
+
+3.  **Ejecuta el servidor de desarrollo:**
+
+    ```bash
+    npm run dev
+    ```
+
+    _El proyecto se abrirá en `http://localhost:8080`_
+
+4.  **Construye para producción:**
+    ```bash
+    npm run build
+    ```
 
 ## 🔗 Despliegue (Live Demo)
 
 Puedes ver el proyecto funcionando en GitHub Pages aquí:
 👉 [Around The U.S. - Hesepiri](https://hesepiri.github.io/web_project_around_es/)
+
+---
+
+**Desarrollado por Héctor Pinedo** en el bootcamp de Desarrollo Web de TripleTen.
