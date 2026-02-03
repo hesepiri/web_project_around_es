@@ -4,6 +4,13 @@ export default class Api {
     this._headers = headers;
   }
 
+  // Metodo para crear el request, y optimizar la llamada a fetch para todos los metodos que necesiten hacer un request a la API
+  _request(endpoint, options) {
+    return fetch(`${this._baseUrl}${endpoint}`, options).then(
+      this._checkResponse,
+    );
+  }
+
   // Método privado para revisar si la respuesta es 200 OK
   _checkResponse(res) {
     if (res.ok) {
@@ -14,74 +21,74 @@ export default class Api {
 
   // Obtener información del usuario
   getUserInfo() {
-    return fetch(`${this._baseUrl}/users/me`, {
+    return this._request("/users/me", {
       headers: this._headers,
-    }).then(this._checkResponse);
+    });
   }
 
   // Obtener tarjetas iniciales
   getInitialCards() {
-    return fetch(`${this._baseUrl}/cards`, {
+    return this._request("/cards", {
       headers: this._headers,
-    }).then(this._checkResponse);
+    });
   }
 
   // Editar perfil de usuario - PATCH /users/me
   editProfile({ name, about }) {
-    return fetch(`${this._baseUrl}/users/me`, {
+    return this._request("/users/me", {
       method: "PATCH",
       headers: this._headers,
       body: JSON.stringify({
         name: name,
         about: about,
       }),
-    }).then(this._checkResponse);
+    });
   }
 
   // Añadir nueva tarjeta - POST /cards
   addCard({ name, link }) {
-    return fetch(`${this._baseUrl}/cards`, {
+    return this._request("/cards", {
       method: "POST",
       headers: this._headers,
       body: JSON.stringify({
         name: name,
         link: link,
       }),
-    }).then(this._checkResponse);
+    });
   }
 
   // Eliminar tarjeta - DELETE /cards/cardId
   deleteCard(cardId) {
-    return fetch(`${this._baseUrl}/cards/${cardId}`, {
+    return this._request(`/cards/${cardId}`, {
       method: "DELETE",
       headers: this._headers,
-    }).then(this._checkResponse);
+    });
   }
 
   // Metodo para actualizar el avatar (Sprint 12)
   updateAvatar(avatarLink) {
-    return fetch(`${this._baseUrl}/users/me/avatar`, {
+    return this._request("/users/me/avatar", {
       method: "PATCH",
       headers: this._headers,
       body: JSON.stringify({
         avatar: avatarLink,
       }),
-    }).then(this._checkResponse);
+    });
   }
 
   // Metdodo para dar like a una tarjeta
   addLike(cardId) {
-    return fetch(`${this._baseUrl}/cards/${cardId}/likes`, {
+    return this._request(`/cards/${cardId}/likes`, {
       method: "PUT",
       headers: this._headers,
-    }).then(this._checkResponse);
+    });
   }
 
   // Metodo para remover like a una tarjeta
   removeLike(cardId) {
-    return fetch(`${this._baseUrl}/cards/${cardId}/likes`, {
+    return this._request(`/cards/${cardId}/likes`, {
       method: "DELETE",
       headers: this._headers,
-    }).then(this._checkResponse);
+    });
   }
 }
