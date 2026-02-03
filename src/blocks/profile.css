@@ -43,21 +43,6 @@
   max-width: 373px;
 }
 
-.profile__image {
-  width: 120px;
-  height: 120px;
-  border-radius: 50%;
-  object-fit: cover;
-  background-position: center;
-  margin-right: 29px;
-
-  /* Ocultamos incialmente */
-  visibility: hidden;
-  /* Para que luego aparezca suavemente (fade-in) */
-  opacity: 0;
-  transition: opacity 0.5s ease;
-}
-
 .profile__add-button {
   width: 150px;
   height: 50px;
@@ -106,8 +91,13 @@
   height: 100%;
   border-radius: 50%;
   object-fit: cover;
-  /* Quitamos el margin-right de aquí porque ahora lo tiene el contenedor */
-  margin-right: 0;
+  background-position: center;
+  margin: 0;
+
+  /* Propiedades de animación */
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity 0.5s ease;
 }
 
 /* El botón de editar (inicialmente invisible u oculto) */
@@ -178,7 +168,8 @@
     max-width: 282px;
   }
 
-  .profile__image {
+  /* AJUSTE: Quitamos el margen al contenedor para centrar en móvil */
+  .profile__avatar-container {
     margin-right: 0;
   }
 
